@@ -1,0 +1,9 @@
+site_name: Zorg Emic
+repo_url: https://github.com/zorg/zorg-emic
+theme: readthedocs
+pages:
+- Home: index.md
+- Drivers:
+  - emic2.md
+- Adaptors:
+  - using-with-raspberry-pi.md

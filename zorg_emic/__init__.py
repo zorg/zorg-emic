@@ -1,2 +1,2 @@
 from .emic2 import Emic2
-from adaptors import Serial
+from .adaptors import Serial

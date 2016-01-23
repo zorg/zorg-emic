@@ -17,7 +17,7 @@ req = open("requirements.txt")
 requirements = req.readlines()
 
 setup(
-    name="zorg-emic",
+    name="zorg_emic",
     version="0.0.1",
     url="https://github.com/zorg/zorg-emic",
     description="Python framework for robotics and physical computing.",
