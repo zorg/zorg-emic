@@ -1,10 +1,20 @@
 import zorg
 import time
 
-def work (my):
+def work(my):
     my.speech.start()
 
+    my.speech.set_voice(1)
+    my.speech.speak("Upgrade in progress")
+
+    count = 0
+
     while True:
+
+        my.speech.speak(count)
+        print(count)
+
+        count = count + 1
 
         # Wait 1 second before doing it again
         time.sleep(1)
@@ -12,8 +22,8 @@ def work (my):
 robot = zorg.robot({
     "connections": {
         "firmata": {
-            "adaptor": "zorg_firmata.Firmata",
-            "port": "/dev/ttyUSB0",
+            "adaptor": "zorg_emic.Serial",
+            "port": "/dev/ttyAMA0",
         },
     },
     "devices": {

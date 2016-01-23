@@ -1,6 +1,5 @@
 from zorg.driver import Driver
 from multiprocessing import Queue
-from time import sleep
 
 
 class Emic2(Driver):
@@ -20,16 +19,15 @@ class Emic2(Driver):
 
     def start(self):
         # Setup involves writing a new line to initialize the board
-        self.connection.write('\n')
-
-        # Pause for 200 milliseconds
-        sleep(0.02)
+        self.connection.connect()
 
     def speak(self, text):
         """
         The main function to convert text into speech.
         """
-        self.queue.put(text)
+        #self.queue.put(text)
+
+        self.connection.write("S%s" % (text))
 
     def set_voice(self, voice):
         """
@@ -46,7 +44,7 @@ class Emic2(Driver):
         """
         #self.queue.put()
         self.currentAction = 'setting voice';
-        self.connection.write('N' + voice + '\n');
+        self.connection.write('N%d' % (voice));
 
     def set_language(self, language, dialect=None):
         """
@@ -57,13 +55,15 @@ class Emic2(Driver):
         #self.queue.put()
         self.currentAction = 'setting language';
         l = 0;
-        if lan == 'en':
+        if language == 'en':
             l = 0;
-        elif lan == 'es':
-            pass
-            #l = typeof op === 'undefined' ? 1 : (op === 'lan' ? 2 : 1 )
+        elif language == 'es':
+            l = 1
 
-        self.connection.write('l' + l + '\n')
+            if dialect == 'ca':
+                l = 2
+
+        self.connection.write('l%s' % (l))
 
     def set_volume(self, volume):
         """
@@ -73,7 +73,7 @@ class Emic2(Driver):
         """
         #self.queue.put()
         self.currentAction = 'setting volume'
-        self.connection.write('V' + vol + '\n')
+        self.connection.write('V%d' % (volume))
 
     def set_rate(self, rate):
         """
@@ -83,14 +83,14 @@ class Emic2(Driver):
         """
         #self.queue.put()
         self.currentAction = 'setting rate'
-        self.connection.write('W' + rate + '\n')
+        self.connection.write('W%d' % (rate))
 
     def pause(self):
         """
         Immediately pause current message.
         """
         self.currentAction = 'paused'
-        self.connection.write('Z\n')
+        self.connection.write('Z')
 
     def stop(self):
         """
@@ -98,7 +98,7 @@ class Emic2(Driver):
         This command is only valid while a message is playing.
         """
         self.currentAction = 'stopped'
-        self.connection.write('X\n')
+        self.connection.write('X')
 
 
     def reset(self):
@@ -107,5 +107,4 @@ class Emic2(Driver):
         """
         #self.queue.put()
         self.currentAction = 'resetting'
-        self.connection.write('R\n')
-
+        self.connection.write('R')
