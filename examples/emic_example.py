@@ -21,14 +21,14 @@ def work(my):
 
 robot = zorg.robot({
     "connections": {
-        "firmata": {
+        "serial": {
             "adaptor": "zorg_emic.Serial",
             "port": "/dev/ttyAMA0",
         },
     },
     "devices": {
         "speech": {
-            "connection": "firmata",
+            "connection": "serial",
             "driver": "zorg_emic.Emic2",
         }
     },

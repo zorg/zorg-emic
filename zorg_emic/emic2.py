@@ -7,14 +7,13 @@ class Emic2(Driver):
     def __init__(self, options, connection):
         super(Emic2, self).__init__(options, connection)
 
-        self.timer = 200
         self.currentAction = 'idle'
-        self.baudrate = 9600
         self.queue = Queue()
 
         self.commands += [
             "speak", "set_voice", "set_language",
-            "set_volume", "set_rate", "pause", "stop"
+            "set_volume", "set_rate", "set_parser",
+            "pause", "stop"
         ]
 
     def start(self):
@@ -84,6 +83,14 @@ class Emic2(Driver):
         #self.queue.put()
         self.currentAction = 'setting rate'
         self.connection.write('W%d' % (rate))
+
+    def set_parser(parser):
+        """
+        Select either the Epson or DECtalk text parsing engine.
+        0 DECtalk
+        1 Epson (default)
+        """
+        self.connection.write('P%d' % (parser))
 
     def pause(self):
         """

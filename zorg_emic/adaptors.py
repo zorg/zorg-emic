@@ -9,7 +9,8 @@ class Serial(Adaptor):
         super(Serial, self).__init__(options)
 
         self.port = options.get("port", "/dev/ttyAMA0")
-        self.serial = serial.Serial("/dev/ttyAMA0", baudrate=9600)
+        self.baudrate = options.get("baudrate", 9600)
+        self.serial = serial.Serial(self.port, baudrate=self.baudrate)
 
     def write(self, value):
         waiting = True

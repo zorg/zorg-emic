@@ -24,3 +24,7 @@ pip install zorg-emic
 ## Examples
 
 Example Python code can be found in the project repo on GitHub ([zorg-emic/examples](https://github.com/zorg/zorg-emic/tree/master/examples)).
+
+## Resources
+
+1. [Parallax Documentation for the Emic 2 Text-to-Speech Module](https://www.parallax.com/downloads/emic-2-text-speech-module-documentation)

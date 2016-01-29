@@ -1,5 +1,6 @@
 # zorg-emic
 
+[![Package Version](https://img.shields.io/pypi/v/zorg-emic.svg)](https://pypi.python.org/pypi/zorg-emic/)
 [![Build Status](https://travis-ci.org/zorg/zorg-emic.svg)](https://travis-ci.org/zorg/zorg-emic)
 [![Documentation Status](https://readthedocs.org/projects/zorg-emic/badge/?version=latest)](http://zorg-emic.readthedocs.org/en/latest/?badge=latest)
 
