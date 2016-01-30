@@ -55,10 +55,21 @@ class Emic2(Driver):
         # Start a background thread to process items in the queue
         self.thread.start()
 
+    def is_valid_string(self, text):
+        """
+        The Emic 2 expects characters that conform to the ISO-8859-1 Latin
+        character set. This method will return false if a string is not
+        ISO-8859-1 compatible.
+        """
+        return all(ord(character) < 128 for character in text)
+
     def speak(self, text):
         """
         The main function to convert text into speech.
         """
+        if not self.is_valid_string(text):
+            raise Exception("%s is not ISO-8859-1 compatible." % (text))
+
         self.queue.put("S%s" % (text))
 
     def set_voice(self, voice):
