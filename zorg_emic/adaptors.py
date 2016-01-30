@@ -1,6 +1,5 @@
 from zorg.adaptor import Adaptor
 import serial
-import time
 
 
 class Serial(Adaptor):
@@ -12,26 +11,15 @@ class Serial(Adaptor):
         self.baudrate = options.get("baudrate", 9600)
         self.serial = serial.Serial(self.port, baudrate=self.baudrate)
 
-    def write(self, value):
-        waiting = True
+    def serial_read(self):
+        return self.serial.read()
 
-        while waiting:
-            self.serial.write("\n")
-            time.sleep(0.3)
-            data = self.serial.read()
-            if data == ':':
-                self.serial.write("%s\n" % (value))
-                waiting = False
-            time.sleep(0.5)
-
+    def serial_write(self, value):
+        self.serial.write(value)
         return value
 
     def connect(self):
         self.serial.open()
-        self.serial.write("\n")
-
-        # Pause for 500 milliseconds
-        time.sleep(0.05)
 
     def disconnect(self):
         self.serial.close()

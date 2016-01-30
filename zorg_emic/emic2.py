@@ -1,5 +1,7 @@
 from zorg.driver import Driver
 from multiprocessing import Queue
+from threading import Thread
+import time
 
 
 class Emic2(Driver):
@@ -9,6 +11,8 @@ class Emic2(Driver):
 
         self.currentAction = 'idle'
         self.queue = Queue()
+        self.thread = Thread(target=self.watch, args=())
+        self.thread.daemon = True
 
         self.commands += [
             "speak", "set_voice", "set_language",
@@ -16,17 +20,46 @@ class Emic2(Driver):
             "pause", "stop"
         ]
 
+    def watch(self):
+        while True:
+            waiting = True
+
+            # Wait if the queue is empty
+            if self.queue.empty():
+                time.sleep(0.5)
+                continue
+
+            while waiting:
+                self.connection.serial.write("\n")
+                time.sleep(0.3)
+                data = self.connection.serial_read()
+
+                # The Emic 2 transmits a ":" when ready to receive commands
+                if data == ':':
+                    value = self.queue.get()
+                    self.connection.serial_write("%s\n" % (value))
+                    waiting = False
+                time.sleep(0.5)
+
+        self.connection.disconnect()
+
     def start(self):
-        # Setup involves writing a new line to initialize the board
         self.connection.connect()
+
+        # Setup involves writing a new line to initialize the board
+        self.connection.serial_write('\n')
+
+        # Pause for 500 milliseconds
+        time.sleep(0.05)
+
+        # Start a background thread to process items in the queue
+        self.thread.start()
 
     def speak(self, text):
         """
         The main function to convert text into speech.
         """
-        #self.queue.put(text)
-
-        self.connection.write("S%s" % (text))
+        self.queue.put("S%s" % (text))
 
     def set_voice(self, voice):
         """
@@ -41,9 +74,8 @@ class Emic2(Driver):
         7: Rough Rita
         8: Whispering Wendy (Beatriz)
         """
-        #self.queue.put()
         self.currentAction = 'setting voice';
-        self.connection.write('N%d' % (voice));
+        self.queue.put('N%d' % (voice));
 
     def set_language(self, language, dialect=None):
         """
@@ -51,7 +83,6 @@ class Emic2(Driver):
         en: English
         es: Spanish | [ lan: latino or ca: castilian ] 
         """
-        #self.queue.put()
         self.currentAction = 'setting language';
         l = 0;
         if language == 'en':
@@ -62,7 +93,7 @@ class Emic2(Driver):
             if dialect == 'ca':
                 l = 2
 
-        self.connection.write('l%s' % (l))
+        self.queue.put('l%s' % (l))
 
     def set_volume(self, volume):
         """
@@ -70,9 +101,8 @@ class Emic2(Driver):
         Volume range [-48 to 18] 
         -48 (softest) to 18 (loudest)
         """
-        #self.queue.put()
         self.currentAction = 'setting volume'
-        self.connection.write('V%d' % (volume))
+        self.queue.put('V%d' % (volume))
 
     def set_rate(self, rate):
         """
@@ -80,9 +110,8 @@ class Emic2(Driver):
         From 75 (slowest) to 600 (fastest).
         Default value: 200.
         """
-        #self.queue.put()
         self.currentAction = 'setting rate'
-        self.connection.write('W%d' % (rate))
+        self.queue.put('W%d' % (rate))
 
     def set_parser(parser):
         """
@@ -90,14 +119,14 @@ class Emic2(Driver):
         0 DECtalk
         1 Epson (default)
         """
-        self.connection.write('P%d' % (parser))
+        self.queue.put('P%d' % (parser))
 
     def pause(self):
         """
         Immediately pause current message.
         """
         self.currentAction = 'paused'
-        self.connection.write('Z')
+        self.queue.put('Z')
 
     def stop(self):
         """
@@ -105,13 +134,11 @@ class Emic2(Driver):
         This command is only valid while a message is playing.
         """
         self.currentAction = 'stopped'
-        self.connection.write('X')
-
+        self.queue.put('X')
 
     def reset(self):
         """
         Reset the current message beign spoken.
         """
-        #self.queue.put()
         self.currentAction = 'resetting'
-        self.connection.write('R')
+        self.queue.put('R')

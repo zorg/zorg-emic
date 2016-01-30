@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup, find_packages
+from setuptools import setup, find_packages
+
 
 try:
     from pypandoc import convert
@@ -18,9 +16,9 @@ requirements = req.readlines()
 
 setup(
     name="zorg-emic",
-    version="0.0.1",
+    version="0.0.2",
     url="https://github.com/zorg/zorg-emic",
-    description="Python framework for robotics and physical computing.",
+    description="Python library for the Emic 2 Text to Speech Module.",
     long_description=readme("README.md"),
     author="Zorg Group",
     author_email="gunthercx@gmail.com",
