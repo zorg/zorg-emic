@@ -63,6 +63,28 @@ class Emic2(Driver):
         """
         return all(ord(character) < 128 for character in text)
 
+    def word_wrap(self, text, width=1023):
+        """
+        A simple word wrapping greedy algorithm that puts
+        as many words into a single string as possible.
+        """
+        substrings = []
+
+        string = text
+        while len(string) > width:
+            index = width - 1
+            while not string[index].isspace():
+                index = index - 1
+
+            line = string[0:index]
+            substrings.append(line)
+
+            string = string[index + 1:]
+
+        substrings.append(string)
+
+        return substrings
+
     def speak(self, text):
         """
         The main function to convert text into speech.
@@ -70,7 +92,13 @@ class Emic2(Driver):
         if not self.is_valid_string(text):
             raise Exception("%s is not ISO-8859-1 compatible." % (text))
 
-        self.queue.put("S%s" % (text))
+        # Maximum allowable 1023 characters per message
+        if len(text) > 1023:
+            lines = self.word_wrap(text, width=1023)
+            for line in lines:
+                self.queue.put("S%s" % (line))
+        else:
+            self.queue.put("S%s" % (text))
 
     def set_voice(self, voice):
         """
@@ -85,19 +113,19 @@ class Emic2(Driver):
         7: Rough Rita
         8: Whispering Wendy (Beatriz)
         """
-        self.currentAction = 'setting voice';
-        self.queue.put('N%d' % (voice));
+        self.currentAction = 'setting voice'
+        self.queue.put('N%d' % (voice))
 
     def set_language(self, language, dialect=None):
         """
         Set the language used for TTS.
         en: English
-        es: Spanish | [ lan: latino or ca: castilian ] 
+        es: Spanish | [ lan: latino or ca: castilian ]
         """
-        self.currentAction = 'setting language';
-        l = 0;
+        self.currentAction = 'setting language'
+        l = 0
         if language == 'en':
-            l = 0;
+            l = 0
         elif language == 'es':
             l = 1
 
@@ -109,7 +137,7 @@ class Emic2(Driver):
     def set_volume(self, volume):
         """
         Set the volume of the Emic 2.
-        Volume range [-48 to 18] 
+        Volume range [-48 to 18]
         -48 (softest) to 18 (loudest)
         """
         self.currentAction = 'setting volume'
@@ -124,7 +152,7 @@ class Emic2(Driver):
         self.currentAction = 'setting rate'
         self.queue.put('W%d' % (rate))
 
-    def set_parser(parser):
+    def set_parser(self, parser):
         """
         Select either the Epson or DECtalk text parsing engine.
         0 DECtalk
