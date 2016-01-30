@@ -2,7 +2,13 @@
 
 ## `zorg_emic.Emic2`
 
-## Methods
+The Zorg Emic 2 Driver provides a convenient software interface for controlling
+the Emic 2 text to speech module.
+
+## Commands
+
+Various commands are available which provide access to the various features of
+the Emic 2 module.
 
 ## `start()`
 
@@ -60,7 +66,7 @@ By default, the speaking rate of the board is set to 200.
 The Emic 2 provides a choice of text parsing engines: Epson or DECtalk.
 Both parsers provide different levels of control over the output of a given string.
 
-The parser can be selectd by passing in an integer to select the corresponding parser.
+The parser can be selected by passing in an integer to select the corresponding parser.
 
 - `0` DECtalk
 - `1` Epson (default)
