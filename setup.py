@@ -13,6 +13,7 @@ except ImportError:
 
 req = open("requirements.txt")
 requirements = req.readlines()
+req.close()
 
 setup(
     name="zorg-emic",
