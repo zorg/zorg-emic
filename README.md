@@ -1,5 +1,6 @@
 # zorg-emic
 
+[![Join the chat at https://gitter.im/zorg/zorg](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zorg/zorg?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Package Version](https://img.shields.io/pypi/v/zorg-emic.svg)](https://pypi.python.org/pypi/zorg-emic/)
 [![Build Status](https://travis-ci.org/zorg/zorg-emic.svg)](https://travis-ci.org/zorg/zorg-emic)
 [![Documentation Status](https://readthedocs.org/projects/zorg-emic/badge/?version=latest)](http://zorg-emic.readthedocs.org/en/latest/?badge=latest)
