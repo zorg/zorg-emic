@@ -17,7 +17,7 @@ req.close()
 
 setup(
     name="zorg-emic",
-    version="0.0.2",
+    version="0.0.3",
     url="https://github.com/zorg/zorg-emic",
     description="Python library for the Emic 2 Text to Speech Module.",
     long_description=readme("README.md"),
